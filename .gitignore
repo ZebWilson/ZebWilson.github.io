@@ -1,0 +1,19 @@
+# ignore everything
+*
+
+# add git metadata to push to repo
+!.gitignore
+
+# add further files as needed
+!README.md
+!LICENSE
+!bun.lock
+!astro.config.mjs
+!package.json
+!tsconfig.json
+!src
+!src/**/*
+!public
+!public/**/*
+!.github
+!.github/**/*
