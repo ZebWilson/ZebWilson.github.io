@@ -2,7 +2,7 @@ name: Deploy Astro + Bun → GitHub Pages
 
 on:
   push:
-    branches: [main]          # change if you use “master”
+    branches: [main]          
   workflow_dispatch:
 
 permissions:
@@ -22,13 +22,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Bun
-        uses: oven-sh/setup-bun@v2      # official Bun installer
+        uses: oven-sh/setup-bun@v2
 
       - name: Install deps
-        run: bun install                # uses bun.lockb if present
+        run: bun install                # gotta pray this uses bun.lock
 
       - name: Build site
-        run: bun run build              # produces ./dist
+        run: bun run build              # create dist and point to it below
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
