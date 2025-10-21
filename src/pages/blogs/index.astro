@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/baseLayout.astro";
+
+const blogFiles = import.meta.glob("../../blog_mdx/*.{md,mdx}", {
+  eager: true,
+});
+
+const posts = Object.entries(blogFiles)
+  .filter(
+    ([path]) => !path.endsWith("index.astro") && !path.endsWith("[slug].astro")
+  )
+  .map(([path, mod]) => {
+    const fileName = path.split("/").pop() || "";
+    const slug = fileName.replace(/\.(md|mdx)$/, "");
+    const m = mod as any;
+    return {
+      slug,
+      ...m.frontmatter,
+    };
+  });
+
+// Optional: sort by date
+posts.sort((a, b) => {
+  if (a.date && b.date)
+    return (
+      new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime()
+    );
+  if (a.date) return -1;
+  if (b.date) return 1;
+  return (a.title || "").localeCompare(b.title || "");
+});
+---
+
+<BaseLayout title="Blogs">
+  <main>
+    <h1>All Blogs</h1>
+    {
+      posts.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/blogs/${post.slug}`}>{post.title || post.slug}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </main>
+</BaseLayout>

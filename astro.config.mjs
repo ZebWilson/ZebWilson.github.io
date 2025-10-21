@@ -9,7 +9,11 @@ import remarkMath from 'remark-math';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
+	// Pass math plugins into the MDX integration so MDX files get the same processing
+	integrations: [
+		mdx({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] }),
+		sitemap(),
+	],
 	markdown: {
 		remarkPlugins: [remarkMath],
 		rehypePlugins: [rehypeKatex],

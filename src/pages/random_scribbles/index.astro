@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/baseLayout.astro";
+
+const blogFiles = import.meta.glob("../../random_scribbles/**/*.{md,mdx}", {
+  eager: true,
+});
+
+const posts = Object.entries(blogFiles)
+  .filter(
+    ([path]) => !path.endsWith("index.astro") && !path.endsWith("[slug].astro")
+  )
+  .map(([path, mod]) => {
+    const fileName = path.split("/").pop() || "";
+    const slug = fileName.replace(/\.(md|mdx)$/, "");
+    const m = mod as any;
+    return {
+      slug,
+      ...m.frontmatter,
+    };
+  });
+
+// Optional: sort by date
+posts.sort((a, b) => {
+  if (a.date && b.date)
+    return (
+      new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime()
+    );
+  if (a.date) return -1;
+  if (b.date) return 1;
+  return (a.title || "").localeCompare(b.title || "");
+});
+---
+
+<BaseLayout title="Random_Scribbles">
+  <main>
+    <h1>Scribble List</h1>
+    {
+      posts.length === 0 ? (
+        <div>
+          <p>Nothing was scribbled down yet?</p>
+          <pre style="white-space:pre-wrap; background:#f8f8f8; padding:12px; border-radius:6px;">
+            {JSON.stringify(Object.keys(blogFiles), null, 2)}
+          </pre>
+        </div>
+      ) : (
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/random_scribbles/${post.slug}`}>
+                {post.title || post.slug}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </main>
+</BaseLayout>

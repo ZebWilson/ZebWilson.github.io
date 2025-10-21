@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/baseLayout.astro";
+
+export async function getStaticPaths() {
+  const modules = import.meta.glob("../../random_scribbles/**/*.{md,mdx}", {
+    eager: true,
+  });
+  return Object.keys(modules).map((file) => {
+    const fileName = file.split("/").pop() || "";
+    const slug = fileName.replace(/\.(md|mdx)$/, "");
+    return { params: { slug } };
+  });
+}
+
+const { slug } = Astro.params;
+
+const modules = import.meta.glob("../../random_scribbles/**/*.{md,mdx}", {
+  eager: true,
+});
+let Post: any = null;
+let frontmatter: Record<string, any> = {};
+for (const [filePath, mod] of Object.entries(modules)) {
+  const fileName = String(filePath).split("/").pop();
+  if (!fileName) continue;
+  const name = fileName.replace(/\.(md|mdx)$/, "");
+  if (name === slug) {
+    const m = mod as any;
+    Post = m.default ?? m.Content ?? null;
+    frontmatter = m.frontmatter ?? m.metadata ?? {};
+    break;
+  }
+}
+
+if (!Post) {
+  throw new Error(`Thought not formed yet?: ${slug}`);
+}
+---
+
+<BaseLayout title={(frontmatter as any).title ?? slug}>
+  <article style="padding:24px; max-width:900px; margin:0 auto;">
+    {
+      (frontmatter as any).date ? (
+        <p>
+          <time datetime={String((frontmatter as any).date)}>
+            {(frontmatter as any).date}
+          </time>
+        </p>
+      ) : null
+    }
+    <Post />
+  </article>
+</BaseLayout>
