@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/baseLayout.astro";
 
 export async function getStaticPaths() {
-  const modules = import.meta.glob("../../random_scribbles/**/*.{md,mdx}", {
+  const modules = import.meta.glob("../../random_scribbles/*.{md,mdx}", {
     eager: true,
   });
   return Object.keys(modules).map((file) => {
