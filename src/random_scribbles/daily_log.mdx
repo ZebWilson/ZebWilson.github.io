@@ -448,3 +448,18 @@ May 21
 * Also the mouse shortcuts to save to memory are pending. Wonder when I'll do those lol.
 * VIA Programming on the keyboard as well - man got a lot of things to do and so little time.
    Time to binge these one by one.
+
+May 23
+* Finally did the m913-ctl thing - looks like it's working but the udev rule file should be 70 not
+   99 on the filename. So apparently we're trying to use utag access so that only the logged in user
+   can modify it, but if you put udev rule with file name 99, it won't be picked up by the utag 
+   since it'll execute as 73. So when you add udev 99, the execution already happened and the tag 
+   will just sit there.
+* KiCad, Blender, Photo editor? I'm not sure what to use for that + freecad i got a lot things to 
+   look into - too many things and too little time, but I'm an procrastinator aaaaa- throwing away
+   the phone works but yeah.
+* Nix sleeps and when waking up it has to be woken up twice. I'm guessing it's due to the
+   akko keyboard. Checking journalctl shows that the usb mode on the keyboard - switch based trigger
+   is causing sleep again. Need to look into this a bit - I'm guessing it's due to the USB mode.
+* How are functioning people managing their time? I feel like I'm missing something. I guess having
+   money to clean up daily tasks is a super power lol.
